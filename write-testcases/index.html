@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Write testcases - HttpRunner Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Write testcases";
+    var mkdocs_page_input_path = "write-testcases.md";
+    var mkdocs_page_url = "/write-testcases/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> HttpRunner Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Introduction/">Introduction</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Installation/">Installation</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../quickstart/">QuickStart</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Write testcases</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#demo">demo</a></li>
+    
+
+    <li class="toctree-l2"><a href="#comparator">Comparator</a></li>
+    
+
+    <li class="toctree-l2"><a href="#extraction-and-validation">Extraction and Validation</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../run-testcases/">Run testcases</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../load-test/">Load test</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../development/">Development</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../FAQ/">FAQ</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">HttpRunner Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Write testcases</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>It is recommended to write testcases in <code>YAML</code> format.</p>
+<h2 id="demo">demo</h2>
+<p>Here is a testset example of typical scenario: get <code>token</code> at the beginning, and each subsequent requests should take the <code>token</code> in the headers.</p>
+<pre><code class="yaml">- config:
+    name: &quot;create user testsets.&quot;
+    variables:
+        - user_agent: 'iOS/10.3'
+        - device_sn: ${gen_random_string(15)}
+        - os_platform: 'ios'
+        - app_version: '2.8.6'
+    request:
+        base_url: &quot;http://127.0.0.1:5000&quot;
+        headers:
+            Content-Type: application/json
+            device_sn: $device_sn
+
+- test:
+    name: get token
+    request:
+        url: /api/get-token
+        method: POST
+        headers:
+            user_agent: $user_agent
+            device_sn: $device_sn
+            os_platform: $os_platform
+            app_version: $app_version
+        json:
+            sign: ${get_sign($user_agent, $device_sn, $os_platform, $app_version)}
+    extract:
+        - token: content.token
+    validate:
+        - eq: [&quot;status_code&quot;, 200]
+        - len_eq: [&quot;content.token&quot;, 16]
+
+- test:
+    name: create user which does not exist
+    request:
+        url: /api/users/1000
+        method: POST
+        headers:
+            token: $token
+        json:
+            name: &quot;user1&quot;
+            password: &quot;123456&quot;
+    validate:
+        - eq: [&quot;status_code&quot;, 201]
+        - eq: [&quot;content.success&quot;, true]
+</code></pre>
+
+<p>Function invoke is supported in <code>YAML/JSON</code> format testcases, such as <code>gen_random_string</code> and <code>get_sign</code> above. This mechanism relies on the <code>debugtak.py</code> hot plugin, with which we can define functions in <code>debugtak.py</code> file, and then functions can be auto discovered and invoked in runtime.</p>
+<p>For detailed regulations of writing testcases, you can read the <a href="../quickstart/"><code>quickstart</code></a> documents.</p>
+<h2 id="comparator">Comparator</h2>
+<p><code>HttpRunner</code> currently supports the following comparators.</p>
+<table>
+<thead>
+<tr>
+<th>comparator</th>
+<th>Description</th>
+<th>A(check), B(expect)</th>
+<th>examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eq</code>, <code>==</code></td>
+<td>value is equal</td>
+<td>A == B</td>
+<td>9 eq 9</td>
+</tr>
+<tr>
+<td><code>lt</code></td>
+<td>less than</td>
+<td>A &lt; B</td>
+<td>7 lt 8</td>
+</tr>
+<tr>
+<td><code>le</code></td>
+<td>less than or equals</td>
+<td>A &lt;= B</td>
+<td>7 le 8, 8 le 8</td>
+</tr>
+<tr>
+<td><code>gt</code></td>
+<td>greater than</td>
+<td>A &gt; B</td>
+<td>8 gt 7</td>
+</tr>
+<tr>
+<td><code>ge</code></td>
+<td>greater than or equals</td>
+<td>A &gt;= B</td>
+<td>8 ge 7, 8 ge 8</td>
+</tr>
+<tr>
+<td><code>ne</code></td>
+<td>not equals</td>
+<td>A != B</td>
+<td>6 ne 9</td>
+</tr>
+<tr>
+<td><code>str_eq</code></td>
+<td>string equals</td>
+<td>str(A) == str(B)</td>
+<td>123 str_eq '123'</td>
+</tr>
+<tr>
+<td><code>len_eq</code>, <code>count_eq</code></td>
+<td>length or count equals</td>
+<td>len(A) == B</td>
+<td>'abc' len_eq 3, [1,2] len_eq 2</td>
+</tr>
+<tr>
+<td><code>len_gt</code>, <code>count_gt</code></td>
+<td>length greater than</td>
+<td>len(A) &gt; B</td>
+<td>'abc' len_gt 2, [1,2,3] len_gt 2</td>
+</tr>
+<tr>
+<td><code>len_ge</code>, <code>count_ge</code></td>
+<td>length greater than or equals</td>
+<td>len(A) &gt;= B</td>
+<td>'abc' len_ge 3, [1,2,3] len_gt 3</td>
+</tr>
+<tr>
+<td><code>len_lt</code>, <code>count_lt</code></td>
+<td>length less than</td>
+<td>len(A) &lt; B</td>
+<td>'abc' len_lt 4, [1,2,3] len_lt 4</td>
+</tr>
+<tr>
+<td><code>len_le</code>, <code>count_le</code></td>
+<td>length less than or equals</td>
+<td>len(A) &lt;= B</td>
+<td>'abc' len_le 3, [1,2,3] len_le 3</td>
+</tr>
+<tr>
+<td><code>contains</code></td>
+<td>contains</td>
+<td>[1, 2] contains 1</td>
+<td>'abc' contains 'a', [1,2,3] len_lt 4</td>
+</tr>
+<tr>
+<td><code>contained_by</code></td>
+<td>contained by</td>
+<td>A in B</td>
+<td>'a' contained_by 'abc', 1 contained_by [1,2]</td>
+</tr>
+<tr>
+<td><code>type_match</code></td>
+<td>A is instance of B</td>
+<td>isinstance(A, B)</td>
+<td>123 type_match 'int'</td>
+</tr>
+<tr>
+<td><code>regex_match</code></td>
+<td>regex matches</td>
+<td>re.match(B, A)</td>
+<td>'abcdef' regex 'a\w+d'</td>
+</tr>
+<tr>
+<td><code>startswith</code></td>
+<td>starts with</td>
+<td>A.startswith(B) is True</td>
+<td>'abc' startswith 'ab'</td>
+</tr>
+<tr>
+<td><code>endswith</code></td>
+<td>ends with</td>
+<td>A.endswith(B) is True</td>
+<td>'abc' endswith 'bc'</td>
+</tr>
+</tbody>
+</table>
+<h2 id="extraction-and-validation">Extraction and Validation</h2>
+<p>Suppose we get the following HTTP response.</p>
+<pre><code class="javascript">// status code: 200
+
+// response headers
+{
+    &quot;Content-Type&quot;: &quot;application/json&quot;
+}
+
+// response body content
+{
+    &quot;success&quot;: False,
+    &quot;person&quot;: {
+        &quot;name&quot;: {
+            &quot;first_name&quot;: &quot;Leo&quot;,
+            &quot;last_name&quot;: &quot;Lee&quot;,
+        },
+        &quot;age&quot;: 29,
+        &quot;cities&quot;: [&quot;Guangzhou&quot;, &quot;Shenzhen&quot;]
+    }
+}
+</code></pre>
+
+<p>In <code>extract</code> and <code>validate</code>, we can do chain operation to extract data field in HTTP response.</p>
+<p>For instance, if we want to get <code>Content-Type</code> in response headers, then we can specify <code>headers.content-type</code>; if we want to get <code>first_name</code> in response content, we can specify <code>content.person.name.first_name</code>.</p>
+<p>There might be slight difference on list, cos we can use index to locate list item. For example, <code>Guangzhou</code> in response content can be specified by <code>content.person.cities.0</code>.</p>
+<pre><code class="javascript">// get status code
+status_code
+
+// get headers field
+headers.content-type
+
+// get content field
+body.success
+content.success
+text.success
+content.person.name.first_name
+content.person.cities.1
+</code></pre>
+
+<pre><code class="yaml">extract:
+    - content_type: headers.content-type
+    - first_name: content.person.name.first_name
+validate:
+    - eq: [&quot;status_code&quot;, 200]
+    - eq: [&quot;headers.content-type&quot;, &quot;application/json&quot;]
+    - gt: [&quot;headers.content-length&quot;, 40]
+    - eq: [&quot;content.success&quot;, true]
+    - len_eq: [&quot;content.token&quot;, 16]
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../run-testcases/" class="btn btn-neutral float-right" title="Run testcases">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../quickstart/" class="btn btn-neutral" title="QuickStart"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../quickstart/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../run-testcases/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>

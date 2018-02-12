@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>QuickStart - HttpRunner Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "QuickStart";
+    var mkdocs_page_input_path = "quickstart.md";
+    var mkdocs_page_url = "/quickstart/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> HttpRunner Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Introduction/">Introduction</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Installation/">Installation</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">QuickStart</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#quickstart">QuickStart</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#introduction-to-sample-interface-service">Introduction to Sample Interface Service</a></li>
+        
+            <li><a class="toctree-l3" href="#launch-sample-interface-service">Launch Sample Interface Service</a></li>
+        
+            <li><a class="toctree-l3" href="#capture-http-request-and-response">Capture HTTP request and response</a></li>
+        
+            <li><a class="toctree-l3" href="#write-the-first-test-case">Write the first test case</a></li>
+        
+            <li><a class="toctree-l3" href="#run-test-cases">Run test cases</a></li>
+        
+            <li><a class="toctree-l3" href="#optimize-test-case-correlation">Optimize test case: correlation</a></li>
+        
+            <li><a class="toctree-l3" href="#optimize-test-case-parameterization">Optimize test case: parameterization</a></li>
+        
+            <li><a class="toctree-l3" href="#optimize-test-case-overall-config-block">Optimize test case: overall config block</a></li>
+        
+            <li><a class="toctree-l3" href="#run-test-cases-and-generate-report">Run test cases and generate report</a></li>
+        
+            <li><a class="toctree-l3" href="#further-more">Further more</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../write-testcases/">Write testcases</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../run-testcases/">Run testcases</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../load-test/">Load test</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../development/">Development</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../FAQ/">FAQ</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">HttpRunner Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>QuickStart</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="quickstart">QuickStart</h1>
+<h2 id="introduction-to-sample-interface-service">Introduction to Sample Interface Service</h2>
+<p>Along with this project, I devised a sample interface service, and you can use it to familiarize how to play with <code>HttpRunner</code>.</p>
+<p>This sample service mainly has two parts:</p>
+<ul>
+<li>Authorization, each request of other APIs should sign with some header fields and get token first.</li>
+<li>RESTful APIs for user management, you can do CRUD manipulation on users.</li>
+</ul>
+<p>As you see, it is very similar to the mainstream production systems. Therefore once you are familiar with handling this demo service, you can master most test scenarios in your project.</p>
+<h2 id="launch-sample-interface-service">Launch Sample Interface Service</h2>
+<p>The demo service is a flask server, we can launch it in this way.</p>
+<pre><code class="text">$ export FLASK_APP=tests/api_server.py
+$ flask run
+ * Serving Flask app &quot;tests.api_server&quot;
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+</code></pre>
+
+<p>Now the sample interface service is running, and we can move on to the next step.</p>
+<h2 id="capture-http-request-and-response">Capture HTTP request and response</h2>
+<p>Before we write testcases, we should know the details of the API. It is a good choice to use a web debugging proxy tool like <code>Charles Proxy</code> to capture the HTTP traffic.</p>
+<p>For example, the image below illustrates getting token from the sample service first, and then creating one user successfully.</p>
+<p><img alt="" src="../images/ate-quickstart-http-1.jpg" /></p>
+<p><img alt="" src="../images/ate-quickstart-http-2.jpg" /></p>
+<p>After thorough understanding of the APIs, we can now begin to write testcases.</p>
+<h2 id="write-the-first-test-case">Write the first test case</h2>
+<p>Open your favorite text editor and you can write test cases like this.</p>
+<pre><code class="yaml">- test:
+    name: get token
+    request:
+        url: http://127.0.0.1:5000/api/get-token
+        method: POST
+        headers:
+            user_agent: iOS/10.3
+            device_sn: 9TN6O2Bn1vzfybF
+            os_platform: ios
+            app_version: 2.8.6
+        json:
+            sign: 19067cf712265eb5426db8d3664026c1ccea02b9
+
+- test:
+    name: create user which does not exist
+    request:
+        url: http://127.0.0.1:5000/api/users/1000
+        method: POST
+        headers:
+            device_sn: 9TN6O2Bn1vzfybF
+            token: F8prvGryC5beBr4g
+        json:
+            name: &quot;user1&quot;
+            password: &quot;123456&quot;
+    validate:
+        - {&quot;check&quot;: &quot;status_code&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: 201}
+        - {&quot;check&quot;: &quot;content.success&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: true}
+</code></pre>
+
+<p>As you see, each API request is described in a <code>test</code> block. And in the <code>request</code> field, it describes the detail of HTTP request, includes url, method, headers and data, which are in line with the captured traffic.</p>
+<p>You may wonder why we use the <code>json</code> field other than <code>data</code>. That's because the post data is in <code>JSON</code> format, when we use <code>json</code> to indicate the post data, we do not have to specify <code>Content-Type</code> to be <code>application/json</code> in request headers or dump data before request.</p>
+<p>Have you recalled some familiar scenes?</p>
+<p>Yes! That's what we did in <a href="../requests.request"><code>requests.request</code></a>! Since <code>HttpRunner</code> takes full reuse of <a href="http://docs.python-requests.org/en/master/"><code>Requests</code></a>, it inherits all powerful features of <a href="http://docs.python-requests.org/en/master/"><code>Requests</code></a>, and we can handle HTTP request as the way we do before.</p>
+<h2 id="run-test-cases">Run test cases</h2>
+<p>Suppose the test case file is named as <a href="../../examples/quickstart-demo-rev-0.yml"><code>quickstart-demo-rev-0.yml</code></a> and is located in <code>examples</code> folder, then we can run it in this way.</p>
+<pre><code class="text">ate examples/demo-rev-0.yml
+Running tests...
+----------------------------------------------------------------------
+ get token ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token
+INFO:root: status_code: 200, response_time: 48 ms, response_length: 46 bytes
+OK (0.049669)s
+ create user which does not exist ... INFO:root: Start to POST http://127.0.0.1:5000/api/users/1000
+ERROR:root: Failed to POST http://127.0.0.1:5000/api/users/1000! exception msg: 403 Client Error: FORBIDDEN for url: http://127.0.0.1:5000/api/users/1000
+ERROR (0.006471)s
+----------------------------------------------------------------------
+Ran 2 tests in 0.056s
+
+FAILED
+ (Errors=1)
+</code></pre>
+
+<p>Oops! The second test case failed with 403 status code.</p>
+<p>That is because we request with the same data as we captured in <code>Charles Proxy</code>, while the <code>token</code> is generated dynamically, thus the recorded data can not be be used twice directly.</p>
+<h2 id="optimize-test-case-correlation">Optimize test case: correlation</h2>
+<p>To fix this problem, we should correlate <code>token</code> field in the second API test case, which is also called <code>correlation</code>.</p>
+<pre><code class="yaml">- test:
+    name: get token
+    request:
+        url: http://127.0.0.1:5000/api/get-token
+        method: POST
+        headers:
+            user_agent: iOS/10.3
+            device_sn: 9TN6O2Bn1vzfybF
+            os_platform: ios
+            app_version: 2.8.6
+        json:
+            sign: 19067cf712265eb5426db8d3664026c1ccea02b9
+    extract:
+        - token: content.token
+    validate:
+        - {&quot;check&quot;: &quot;status_code&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: 200}
+        - {&quot;check&quot;: &quot;content.token&quot;, &quot;comparator&quot;: &quot;len_eq&quot;, &quot;expect&quot;: 16}
+
+- test:
+    name: create user which does not exist
+    request:
+        url: http://127.0.0.1:5000/api/users/1000
+        method: POST
+        headers:
+            device_sn: 9TN6O2Bn1vzfybF
+            token: $token
+        json:
+            name: &quot;user1&quot;
+            password: &quot;123456&quot;
+    validate:
+        - {&quot;check&quot;: &quot;status_code&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: 201}
+        - {&quot;check&quot;: &quot;content.success&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: true}
+</code></pre>
+
+<p>As you see, the <code>token</code> field is no longer hardcoded, instead it is extracted from the first API request with <code>extract</code> mechanism. In the meanwhile, it is assigned to <code>token</code> variable, which can be referenced by the subsequent API requests.</p>
+<p>Now we save the test cases to <a href="../../examples/quickstart-demo-rev-1.yml"><code>quickstart-demo-rev-1.yml</code></a> and rerun it, and we will find that both API requests to be successful.</p>
+<h2 id="optimize-test-case-parameterization">Optimize test case: parameterization</h2>
+<p>Let's look back to our test set <code>quickstart-demo-rev-1.yml</code>, and we can see the <code>device_sn</code> field is still hardcoded. This may be quite different from the actual scenarios.</p>
+<p>In actual scenarios, each user's <code>device_sn</code> is different, so we should parameterize the request parameters, which is also called <code>parameterization</code>. In the meanwhile, the <code>sign</code> field is calculated with other header fields, thus it may change significantly if any header field changes slightly.</p>
+<p>However, the test cases are only <code>YAML</code> documents, it is impossible to generate parameters dynamically in such text. Fortunately, we can combine <code>Python</code> scripts with <code>YAML/JSON</code> test cases in <code>HttpRunner</code>.</p>
+<p>To achieve this goal, we can utilize <code>debugtalk.py</code> plugin and <code>variables</code> mechanisms.</p>
+<p>To be specific, we can create a Python file (<code>examples/debugtalk.py</code>) and implement the related algorithm in it. The <code>debugtalk.py</code> file can not only be located beside <code>YAML/JSON</code> testset file, but also can be in any upward recursive folder. Since we want <code>debugtalk.py</code> to be importable, we should put a <code>__init__.py</code> in its folder to make it as a Python module.</p>
+<pre><code class="python">import hashlib
+import hmac
+import random
+import string
+
+SECRET_KEY = &quot;DebugTalk&quot;
+
+def get_sign(*args):
+    content = ''.join(args).encode('ascii')
+    sign_key = SECRET_KEY.encode('ascii')
+    sign = hmac.new(sign_key, content, hashlib.sha1).hexdigest()
+    return sign
+
+def gen_random_string(str_len):
+    random_char_list = []
+    for _ in range(str_len):
+        random_char = random.choice(string.ascii_letters + string.digits)
+        random_char_list.append(random_char)
+
+    random_string = ''.join(random_char_list)
+    return random_string
+</code></pre>
+
+<p>And then, we can revise our demo test case and reference the functions. Suppose the revised file named <a href="../../examples/quickstart-demo-rev-2.yml"><code>quickstart-demo-rev-2.yml</code></a>.</p>
+<pre><code class="yaml">- test:
+    name: get token
+    variables:
+        - user_agent: 'iOS/10.3'
+        - device_sn: ${gen_random_string(15)}
+        - os_platform: 'ios'
+        - app_version: '2.8.6'
+    request:
+        url: http://127.0.0.1:5000/api/get-token
+        method: POST
+        headers:
+            user_agent: $user_agent
+            device_sn: $device_sn
+            os_platform: $os_platform
+            app_version: $app_version
+        json:
+            sign: ${get_sign($user_agent, $device_sn, $os_platform, $app_version)}
+    extract:
+        - token: content.token
+    validate:
+        - {&quot;check&quot;: &quot;status_code&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: 200}
+        - {&quot;check&quot;: &quot;content.token&quot;, &quot;comparator&quot;: &quot;len_eq&quot;, &quot;expect&quot;: 16}
+
+- test:
+    name: create user which does not exist
+    request:
+        url: http://127.0.0.1:5000/api/users/1000
+        method: POST
+        headers:
+            device_sn: $device_sn
+            token: $token
+        json:
+            name: &quot;user1&quot;
+            password: &quot;123456&quot;
+    validate:
+        - {&quot;check&quot;: &quot;status_code&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: 201}
+        - {&quot;check&quot;: &quot;content.success&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: true}
+</code></pre>
+
+<p>In this revised test case, <code>variable reference</code> and <code>function invoke</code> mechanisms are both used.</p>
+<p>To make fields like <code>device_sn</code> can be used more than once, we bind values to variables in <code>variables</code> block. When we bind variables, we can not only bind exact value to a variable name, but also can call a function and bind the evaluated value to it.</p>
+<p>When we want to reference a variable in the test case, we can do this with a escape character <code>$</code>. For example, <code>$user_agent</code> will not be taken as a normal string, and <code>HttpRunner</code> will consider it as a variable named <code>user_agent</code>, search and return its binding value.</p>
+<p>When we want to reference a function, we shall use another escape character <code>${}</code>. Any content in <code>${}</code> will be considered as function calling, so we should guarantee that we call functions in the right way. At the same time, variables can also be referenced as parameters of function.</p>
+<h2 id="optimize-test-case-overall-config-block">Optimize test case: overall config block</h2>
+<p>There is still one issue unsolved.</p>
+<p>The <code>device_sn</code> field is defined in the first API test case, thus it may be impossible to reference it in other test cases. Context separation is a well-designed mechanism, and we should obey this good practice.</p>
+<p>To handle this case, overall <code>config</code> block is supported in <code>HttpRunner</code>. If we define variables or import functions in <code>config</code> block, these variables and functions will become global and can be referenced in the whole test set.</p>
+<pre><code class="yaml"># examples/quickstart-demo-rev-3.yml
+- config:
+    name: &quot;smoketest for CRUD users.&quot;
+    variables:
+        - device_sn: ${gen_random_string(15)}
+    request:
+        base_url: http://127.0.0.1:5000
+        headers:
+            device_sn: $device_sn
+
+- test:
+    name: get token
+    variables:
+        - user_agent: 'iOS/10.3'
+        - os_platform: 'ios'
+        - app_version: '2.8.6'
+    request:
+        url: /api/get-token
+        method: POST
+        headers:
+            user_agent: $user_agent
+            os_platform: $os_platform
+            app_version: $app_version
+        json:
+            sign: ${get_sign($user_agent, $device_sn, $os_platform, $app_version)}
+    extract:
+        - token: content.token
+    validate:
+        - {&quot;check&quot;: &quot;status_code&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: 200}
+        - {&quot;check&quot;: &quot;content.token&quot;, &quot;comparator&quot;: &quot;len_eq&quot;, &quot;expect&quot;: 16}
+
+- test:
+    name: create user which does not exist
+    request:
+        url: /api/users/1000
+        method: POST
+        headers:
+            token: $token
+        json:
+            name: &quot;user1&quot;
+            password: &quot;123456&quot;
+    validate:
+        - {&quot;check&quot;: &quot;status_code&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: 201}
+        - {&quot;check&quot;: &quot;content.success&quot;, &quot;comparator&quot;: &quot;eq&quot;, &quot;expect&quot;: true}
+</code></pre>
+
+<p>As you see, we define variables in <code>config</code> block. Also, we can set <code>base_url</code> in <code>config</code> block, thereby we can specify relative path in each API request url. Besides, we can also set common fields in <code>config</code> <code>request</code>, such as <code>device_sn</code> in headers.</p>
+<p>Until now, the test cases are finished and each detail is handled properly.</p>
+<h2 id="run-test-cases-and-generate-report">Run test cases and generate report</h2>
+<p>Finally, let's run test set <a href="../../examples/quickstart-demo-rev-3.yml"><code>quickstart-demo-rev-3.yml</code></a> once more.</p>
+<pre><code class="text">$ ate examples/quickstart-demo-rev-4.yml
+Running tests...
+----------------------------------------------------------------------
+ get token ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token
+INFO:root: status_code: 200, response_time: 33 ms, response_length: 46 bytes
+OK (0.037027)s
+ create user which does not exist ... INFO:root: Start to POST http://127.0.0.1:5000/api/users/1000
+INFO:root: status_code: 201, response_time: 15 ms, response_length: 54 bytes
+OK (0.016414)s
+----------------------------------------------------------------------
+Ran 2 tests in 0.054s
+OK
+
+Generating HTML reports...
+Template is not specified, load default template instead.
+Reports generated: /Users/Leo/MyProjects/HttpRunner/reports/quickstart-demo-rev-0/2017-08-01-16-51-51.html
+</code></pre>
+
+<p>Great! The test case runs successfully and generates a <code>HTML</code> test report.</p>
+<p><img alt="" src="../images/ate-quickstart-demo-report.jpg" /></p>
+<h2 id="further-more">Further more</h2>
+<p>This is just a starting point, see the <code>advanced guide</code> for the advanced features.</p>
+<ul>
+<li>templating</li>
+<li><a href="extraction-and-validation.md"><code>data extraction and validation</code></a></li>
+<li><a href="comparator.md"><code>comparator</code></a></li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../write-testcases/" class="btn btn-neutral float-right" title="Write testcases">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Installation/" class="btn btn-neutral" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../Installation/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../write-testcases/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>

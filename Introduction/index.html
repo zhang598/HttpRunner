@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Introduction - HttpRunner Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Introduction";
+    var mkdocs_page_input_path = "Introduction.md";
+    var mkdocs_page_url = "/Introduction/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> HttpRunner Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Introduction</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#introduction">Introduction</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#design-philosophy">Design Philosophy</a></li>
+        
+            <li><a class="toctree-l3" href="#key-features">Key Features</a></li>
+        
+            <li><a class="toctree-l3" href="#learn-more">Learn more</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Installation/">Installation</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../quickstart/">Quickstart</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../write-testcases/">Write testcases</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../run-testcases/">Run testcases</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../load-test/">Load test</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../development/">Development</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../FAQ/">FAQ</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">HttpRunner Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Introduction</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="introduction">Introduction</h1>
+<h2 id="design-philosophy">Design Philosophy</h2>
+<p>Take full reuse of Python's existing powerful libraries: <a href="http://docs.python-requests.org/en/master/"><code>Requests</code></a>, <a href="https://docs.python.org/3/library/unittest.html"><code>unittest</code></a> and <a href="http://locust.io/"><code>Locust</code></a>. And achieve the goal of API automation test, production environment monitoring, and API performance test, with a concise and elegant manner.</p>
+<h2 id="key-features">Key Features</h2>
+<ul>
+<li>Inherit all powerful features of <a href="http://docs.python-requests.org/en/master/"><code>Requests</code></a>, just have fun to handle HTTP in human way.</li>
+<li>Define testcases in YAML or JSON format in concise and elegant manner.</li>
+<li>Supports <code>function</code>/<code>variable</code>/<code>extract</code>/<code>validate</code> mechanisms to create full test scenarios.</li>
+<li>With <code>debugtalk.py</code> plugin, module functions can be auto-discovered in recursive upward directories.</li>
+<li>Testcases can be run in diverse ways, with single testset, multiple testsets, or entire project folder.</li>
+<li>Test report is concise and clear, with detailed log records. See <a href="https://github.com/HttpRunner/PyUnitReport"><code>PyUnitReport</code></a>.</li>
+<li>With reuse of <a href="http://locust.io/"><code>Locust</code></a>, you can run performance test without extra work.</li>
+<li>CLI command supported, perfect combination with <a href="https://jenkins.io/index.html">Jenkins</a>.</li>
+</ul>
+<h2 id="learn-more">Learn more</h2>
+<p>You can read this <a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">blog</a> to learn more about the background and initial thoughts of <code>HttpRunner</code>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Installation/" class="btn btn-neutral float-right" title="Installation">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Installation/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>

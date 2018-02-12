@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Load test - HttpRunner Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Load test";
+    var mkdocs_page_input_path = "load-test.md";
+    var mkdocs_page_url = "/load-test/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> HttpRunner Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Introduction/">Introduction</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Installation/">Installation</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../quickstart/">QuickStart</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../write-testcases/">Write testcases</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../run-testcases/">Run testcases</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Load test</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#load-test">Load Test</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../development/">Development</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../FAQ/">FAQ</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">HttpRunner Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Load test</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="load-test">Load Test</h2>
+<p>With reuse of <a href="http://locust.io/"><code>Locust</code></a>, you can run performance test without extra work.</p>
+<pre><code class="bash">$ locusts -V
+[2017-08-26 23:45:42,246] bogon/INFO/stdout: Locust 0.8a2
+[2017-08-26 23:45:42,246] bogon/INFO/stdout:
+</code></pre>
+
+<p>For full usage, you can run <code>locusts -h</code> to see help, and you will find that it is the same with <code>locust -h</code>.</p>
+<p>The only difference is the <code>-f</code> argument. If you specify <code>-f</code> with a Python locustfile, it will be the same as <code>locust</code>, while if you specify <code>-f</code> with a <code>YAML/JSON</code> testcase file, it will convert to Python locustfile first and then pass to <code>locust</code>.</p>
+<pre><code class="bash">$ locusts -f examples/first-testcase.yml
+[2017-08-18 17:20:43,915] Leos-MacBook-Air.local/INFO/locust.main: Starting web monitor at *:8089
+[2017-08-18 17:20:43,918] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2
+</code></pre>
+
+<p>In this case, you can reuse all features of <a href="http://locust.io/"><code>Locust</code></a>.</p>
+<p>That’s not all about it. With the argument <code>--cpu-cores</code>, you can even start locust with master and specified number of slaves (default to cpu cores number) at one time, which means you can leverage all cpus of your machine.</p>
+<pre><code class="bash">$ locusts -f examples/first-testcase.yml --cpu-cores 4
+[2017-08-26 23:51:47,071] bogon/INFO/locust.main: Starting web monitor at *:8089
+[2017-08-26 23:51:47,075] bogon/INFO/locust.main: Starting Locust 0.8a2
+[2017-08-26 23:51:47,078] bogon/INFO/locust.main: Starting Locust 0.8a2
+[2017-08-26 23:51:47,080] bogon/INFO/locust.main: Starting Locust 0.8a2
+[2017-08-26 23:51:47,083] bogon/INFO/locust.main: Starting Locust 0.8a2
+[2017-08-26 23:51:47,084] bogon/INFO/locust.runners: Client 'bogon_656e0af8e968a8533d379dd252422ad3' reported as ready. Currently 1 clients ready to swarm.
+[2017-08-26 23:51:47,085] bogon/INFO/locust.runners: Client 'bogon_09f73850252ee4ec739ed77d3c4c6dba' reported as ready. Currently 2 clients ready to swarm.
+[2017-08-26 23:51:47,084] bogon/INFO/locust.main: Starting Locust 0.8a2
+[2017-08-26 23:51:47,085] bogon/INFO/locust.runners: Client 'bogon_869f7ed671b1a9952b56610f01e2006f' reported as ready. Currently 3 clients ready to swarm.
+[2017-08-26 23:51:47,085] bogon/INFO/locust.runners: Client 'bogon_80a804cda36b80fac17b57fd2d5e7cdb' reported as ready. Currently 4 clients ready to swarm.
+</code></pre>
+
+<p><img alt="" src="../images/locusts-full-speed.jpg" /></p>
+<p>Enjoy!</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../development/" class="btn btn-neutral float-right" title="Development">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../run-testcases/" class="btn btn-neutral" title="Run testcases"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../run-testcases/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../development/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>
