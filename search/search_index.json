@@ -157,12 +157,12 @@
         },
         {
             "location": "/development/",
-            "text": "Development\n\n\nTo develop or debug \nHttpRunner\n, you can install relevant requirements and use \nmain-hrun.py\n or \nmain-locust.py\n as entrances.\n\n\n$ pip install -r requirements.txt\n$ python main-hrun -h\n$ python main-locust -h",
+            "text": "Development\n\n\nTo develop or debug \nHttpRunner\n, you shall clone source code first.\n\n\n$ git clone https://github.com/HttpRunner/HttpRunner.git\n\n\n\n\nThen install all dependencies:\n\n\n$ pip install -r requirements-dev.txt\n\n\n\n\nNow you can use \nhttprunner/cli.py\n as debugging entrances.\n\n\n# debug hrun\n$ python httprunner/cli.py hrun -h\n\n# debug locusts\n$ python httprunner/cli.py locusts -h",
             "title": "Development"
         },
         {
             "location": "/development/#development",
-            "text": "To develop or debug  HttpRunner , you can install relevant requirements and use  main-hrun.py  or  main-locust.py  as entrances.  $ pip install -r requirements.txt\n$ python main-hrun -h\n$ python main-locust -h",
+            "text": "To develop or debug  HttpRunner , you shall clone source code first.  $ git clone https://github.com/HttpRunner/HttpRunner.git  Then install all dependencies:  $ pip install -r requirements-dev.txt  Now you can use  httprunner/cli.py  as debugging entrances.  # debug hrun\n$ python httprunner/cli.py hrun -h\n\n# debug locusts\n$ python httprunner/cli.py locusts -h",
             "title": "Development"
         },
         {
