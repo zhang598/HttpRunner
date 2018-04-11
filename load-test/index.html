@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.6.2">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.6.5">
     
     
       
@@ -40,7 +40,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.9b572555.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.9d8fef76.css">
       
     
     
@@ -361,8 +361,8 @@
 </code></pre>
 
 <p>In this case, you can reuse all features of <a href="http://locust.io/"><code>Locust</code></a>.</p>
-<p>That’s not all about it. With the argument <code>--cpu-cores</code>, you can even start locust with master and specified number of slaves (default to cpu cores number) at one time, which means you can leverage all cpus of your machine.</p>
-<pre><code class="bash">$ locusts -f examples/first-testcase.yml --cpu-cores 4
+<p>That’s not all about it. With the argument <code>--processes</code>, you can even start locust with master and specified number of slaves (default to cpu cores number) at one time, which means you can leverage all cpus of your machine.</p>
+<pre><code class="bash">$ locusts -f examples/first-testcase.yml --processes 4
 [2017-08-26 23:51:47,071] bogon/INFO/locust.main: Starting web monitor at *:8089
 [2017-08-26 23:51:47,075] bogon/INFO/locust.main: Starting Locust 0.8a2
 [2017-08-26 23:51:47,078] bogon/INFO/locust.main: Starting Locust 0.8a2
@@ -446,7 +446,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.abd7b172.js"></script>
+      <script src="../assets/javascripts/application.02434462.js"></script>
       
       <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
