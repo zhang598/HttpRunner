@@ -1,0 +1,10 @@
+name: '获取租户列表'
+request:
+  method:  'GET'
+  url: "/hodor/apis/cauth.auth.caicloud.io/v2/tenants" 
+  headers:
+    Authorization: $token   
+validate:
+  - eq:
+    - status_code
+    - 200

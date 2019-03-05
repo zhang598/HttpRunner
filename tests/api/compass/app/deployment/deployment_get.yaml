@@ -1,0 +1,10 @@
+name: '获取无状态服务信息'
+request:
+  method:  'GET'
+  url: /hodor/apis/admin.apps.caicloud.io/v2/clusters/$clusterId/partitions/$partition/apps/$deployment
+  headers:
+    Authorization: $token
+validate:
+  - eq:
+    - status_code
+    - 200

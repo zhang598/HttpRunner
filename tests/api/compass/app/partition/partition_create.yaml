@@ -1,0 +1,26 @@
+name: '创建namespace'
+request:
+  method:  'POST'
+  url: "/hodor/apis/admin.tenant.caicloud.io/v1alpha1/clusters/$clusterId/partitions" 
+  headers:
+    Authorization: $token   
+  json:
+    metadata:
+      name: $partition_name                                     
+    spec:
+      tenant: $tenant_id
+      quota:                                                       
+        limits.cpu: $limits_cpu                                         
+        limits.memory: $limits_memory                                     
+        requests.cpu: $requests_cpu                                       
+        requests.memory: $requests_memory                                    
+
+variables:
+  - limits_cpu: '1000m'
+  - limits_memory: '1024Mi'
+  - requests_cpu: '1000m'
+  - requests_memory: '2014Mi'
+validate:
+  - eq:
+    - status_code
+    - 201

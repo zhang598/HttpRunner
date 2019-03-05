@@ -176,13 +176,14 @@ def load_dot_env_file(dot_env_path):
 
     with io.open(dot_env_path, 'r', encoding='utf-8') as fp:
         for line in fp:
+            print line
             # maxsplit=1
             if "=" in line:
                 variable, value = line.split("=", 1)
             elif ":" in line:
                 variable, value = line.split(":", 1)
-            elif line.startswith("#"):
-                    pass
+            elif line.startswith("#") or line.startswith("\n"):
+                pass
             else:
                 raise exceptions.FileFormatError(".env format error")
 

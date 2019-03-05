@@ -1,0 +1,13 @@
+name: '创建租户'
+request:
+  method:  'POST'
+  url: "/hodor/apis/cauth.auth.caicloud.io/v2/tenants"
+  json: $tenantObject
+  headers:
+    Authorization: $token
+validate:
+  - eq:
+    - status_code
+    - 201
+
+

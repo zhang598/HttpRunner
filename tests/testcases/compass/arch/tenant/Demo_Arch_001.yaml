@@ -1,0 +1,75 @@
+################################################################
+# 创建者：   李四       
+# 创建日期： 20xx/xx/xx
+################################################################
+# 用例标题：创建租户
+################################################################
+# 预置条件：
+# 1.控制集群运行正常
+# 2.用户集群运行正常
+################################################################
+# 测试步骤：
+# 1. 创建单个租户，有结果1
+################################################################
+# 预期结果：
+# 1.创建成功
+################################################################
+-   config:
+        name: Demo_Arch_001
+        base_url: ${getBaseURL()}
+        headers:
+            Authorization: $token
+        variables:
+            - token: ${getToken()}
+            - tenantObject: 
+                { 'name':'usr001',
+                    'id': 'usr001'
+                }
+            - tenantId: usr001
+        verify: False
+
+-   test:
+        api: api/compass/arch/tenant/tenants_list.yaml
+        extract:
+            - total: content.total
+
+-   test:
+        api: api/compass/arch/tenant/tenants_create.yaml
+        variables:
+            tenantObject: $tenantObject
+
+-   test:
+        name: 再次创建，失败
+        api: api/compass/arch/tenant/tenants_create.yaml
+        variables:
+            tenantObject: $tenantObject
+        validate:
+            - eq:
+                - status_code
+                - 409
+
+-   test:
+        name: total 加 1
+        api: api/compass/arch/tenant/tenants_list.yaml
+        validate:
+            - eq:
+                - json.total
+                - ${assertSum($total, 1)}
+
+-   test:
+        name: 获取已创建tenant信息
+        api: api/compass/arch/tenant/tenants_get.yaml
+        variables:
+            tenantId: $tenantId
+        validate:
+            - eq:
+                - json.id
+                - $tenantId        
+
+-   test:
+        name: 删除租户
+        api: api/compass/arch/tenant/tenants_delete.yaml
+        variables:
+            tenantId: $tenantId
+
+        

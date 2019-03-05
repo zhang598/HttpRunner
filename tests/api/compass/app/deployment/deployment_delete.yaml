@@ -1,0 +1,10 @@
+name: ' 删除无状态服务'
+request:
+  method:  'DELETE'
+  url: /hodor/apis/admin.apps.caicloud.io/v2/clusters/$clusterId/partitions/$partition/apps/$deployment
+  headers:
+    Authorization: $token
+validate:
+  - eq:
+    - status_code
+    - 204

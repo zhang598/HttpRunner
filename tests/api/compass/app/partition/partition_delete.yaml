@@ -1,0 +1,10 @@
+name: '删除namespace'
+request:
+  method:  'DELETE'
+  url: "/hodor/apis/admin.tenant.caicloud.io/v1alpha1/clusters/$clusterId/partitions/$partition_id" 
+  headers:
+    Authorization: $token     
+validate:
+  - eq:
+    - status_code
+    - 204

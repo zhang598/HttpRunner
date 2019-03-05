@@ -1,0 +1,10 @@
+name: 删除租户
+request:
+  method:  DELETE
+  url: /hodor/apis/cauth.auth.caicloud.io/v2/tenants/$tenantId
+  headers:
+    Authorization: $token
+validate:
+  - eq:
+    - status_code
+    - 204

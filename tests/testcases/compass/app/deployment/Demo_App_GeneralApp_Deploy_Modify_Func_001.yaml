@@ -1,0 +1,90 @@
+################################################################
+# 创建者：   张海峰       
+# 创建日期： 2019/03/05
+################################################################
+# 用例标题：创建应用Demo
+################################################################
+# 预置条件：
+# 1.控制集群运行正常
+# 2.用户集群运行正常
+# 3.租户已经分配了相关的资源，包括CPU，内存，GPU，存储方案等
+################################################################
+# 测试步骤：
+# 1. 创建无状态服务，有结果1
+################################################################
+# 预期结果：
+# 1.创建成功
+################################################################
+-   config:
+        name: Demo_App.GeneralApp.Deploy.Modify.Func.001
+        base_url: ${getBaseURL()}
+        headers:
+            Authorization: $token
+        variables:
+            - token: ${getToken()}
+            - cluster_id: 'user-1c42c7-20190122132344-h38'
+            - partition: ${gen_random_string()}
+            - tenant_id: 'app'
+            - deployment_name: nginx-deployment
+
+-   test:
+        api: api/compass/partition/partition_create.yaml
+        variables:
+            limits_cpu: '1'
+            limits_memory: '1Gi'
+            requests_cpu: '1'
+            requests_memory: '1Gi'
+            partition_name: $partition
+
+-   test:
+        api: api/app/deployment_create.yaml
+        variables:
+            body:
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: $deployment_name
+                labels:
+                  app: nginx
+              spec:
+                replicas: 1
+                selector:
+                  matchLabels:
+                    app: nginx
+                template:
+                  metadata:
+                    labels:
+                      app: nginx
+                  spec:
+                    containers:
+                    - name: nginx
+                      image: cargo.caicloudprivatetest.com/library/nginx:1.13.12
+                      resources:
+                        limits:
+                          cpu: 100m
+                          memory: 100Mi
+                        requests:
+                          cpu: 100m
+                          memory: 100Mi             
+
+-   test:
+        api: api/app/deployment_get.yaml
+        variables:
+            deployment: $deployment_name
+        validate:
+          - eq:
+            - json.status.phase
+            - Running
+        wait:
+          Total_Time: 60
+
+-   test:
+        api: api/app/deployment_delete.yaml
+        variables:
+            deployment: $deployment_name
+
+-   test:
+        api: api/compass/partition/partition_delete.yaml
+        variables:
+            partition_id: $partition
+

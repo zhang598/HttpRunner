@@ -1,0 +1,40 @@
+name: '创建无状态服务'
+request:
+  method:  'POST'
+  url: /hodor/apis/admin.apps.caicloud.io/v2/clusters/$clusterId/partitions/$partition/apps
+  json: $body
+  headers:
+    Authorization: $token
+    Content-Type: text/plain
+validate:
+  - eq:
+    - status_code
+    - 201
+variables:
+    body:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: nginx-deployment
+        labels:
+          app: nginx
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: nginx
+        template:
+          metadata:
+            labels:
+              app: nginx
+          spec:
+            containers:
+            - name: nginx
+              image: cargo.caicloudprivatetest.com/library/nginx:1.13.12
+              resources:
+                limits:
+                  cpu: 100m
+                  memory: 100Mi
+                requests:
+                  cpu: 100m
+                  memory: 100Mi
