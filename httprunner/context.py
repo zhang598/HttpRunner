@@ -192,6 +192,8 @@ class SessionContext(object):
 
             self.validation_results.append(evaluated_validator)
 
-        if not validate_pass:
-            failures_string = "\n".join([failure for failure in failures])
-            raise exceptions.ValidationFailure(failures_string)
+        return validate_pass, failures
+
+        # if not validate_pass:
+        #     failures_string = "\n".join([failure for failure in failures])
+        #     raise exceptions.ValidationFailure(failures_string)

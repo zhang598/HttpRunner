@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import time
 from unittest.case import SkipTest
 
 from httprunner import exceptions, logger, response, utils
@@ -155,38 +156,7 @@ class Runner(object):
                 # TODO: check hook function if valid
                 self.session_context.eval_content(action)
 
-    def _run_test(self, test_dict):
-        """ run single teststep.
-
-        Args:
-            test_dict (dict): teststep info
-                {
-                    "name": "teststep description",
-                    "skip": "skip this test unconditionally",
-                    "times": 3,
-                    "variables": [],            # optional, override
-                    "request": {
-                        "url": "http://127.0.0.1:5000/api/users/1000",
-                        "method": "POST",
-                        "headers": {
-                            "Content-Type": "application/json",
-                            "authorization": "$authorization",
-                            "random": "$random"
-                        },
-                        "json": {"name": "user", "password": "123456"}
-                    },
-                    "extract": {},              # optional
-                    "validate": [],             # optional
-                    "setup_hooks": [],          # optional
-                    "teardown_hooks": []        # optional
-                }
-
-        Raises:
-            exceptions.ParamsError
-            exceptions.ValidationFailure
-            exceptions.ExtractFailure
-
-        """
+    def _run_test_once(self, test_dict, wait_validators=None):
         # clear meta data first to ensure independence for each test
         self.__clear_test_data()
 
@@ -251,35 +221,145 @@ class Runner(object):
         self.session_context.update_session_variables(extracted_variables_mapping)
 
         # validate
+        if wait_validators:
+            wait_validate_pass, wait_failures = self.session_context.validate(wait_validators, resp_obj)
+            if not wait_validate_pass:
+                # err_msg = "{} DETAILED REQUEST & RESPONSE {}\n".format("*" * 32, "*" * 32)
+                #
+                # # log request
+                # err_msg += "====== request details ======\n"
+                # err_msg += "url: {}\n".format(url)
+                # err_msg += "method: {}\n".format(method)
+                # err_msg += "headers: {}\n".format(parsed_test_request.pop("headers", {}))
+                # for k, v in parsed_test_request.items():
+                #     v = utils.omit_long_data(v)
+                #     err_msg += "{}: {}\n".format(k, repr(v))
+
+                # err_msg += "\n"
+
+                # log response
+                # err_msg += "====== response details ======\n"
+                # err_msg += "status_code: {}\n".format(resp_obj.status_code)
+                # err_msg += "headers: {}\n".format(resp_obj.headers)
+                # err_msg += "body: {}\n".format(repr(resp_obj.text))
+                # logger.log_error("During the wait: \n" + err_msg)
+                logger.log_error("====== During the wait: the expect conditions can not Meet the requirements! ======")
+                failures_string = "\n".join([failure for failure in wait_failures])
+                self.validation_results = self.session_context.validation_results
+                raise exceptions.ValidationFailure(failures_string)
+
+
         validators = test_dict.get("validate", [])
-        try:
-            self.session_context.validate(validators, resp_obj)
+        validate_pass, failures = self.session_context.validate(validators, resp_obj)
+        self.validation_results = self.session_context.validation_results
 
-        except (exceptions.ParamsError, exceptions.ValidationFailure, exceptions.ExtractFailure):
-            err_msg = "{} DETAILED REQUEST & RESPONSE {}\n".format("*" * 32, "*" * 32)
+        # try:
+        #     validate_pass, failures = self.session_context.validate(validators, resp_obj)
 
-            # log request
-            err_msg += "====== request details ======\n"
-            err_msg += "url: {}\n".format(url)
-            err_msg += "method: {}\n".format(method)
-            err_msg += "headers: {}\n".format(parsed_test_request.pop("headers", {}))
-            for k, v in parsed_test_request.items():
-                v = utils.omit_long_data(v)
-                err_msg += "{}: {}\n".format(k, repr(v))
+        # except (exceptions.ParamsError, exceptions.ValidationFailure, exceptions.ExtractFailure):
+        #     err_msg = "{} DETAILED REQUEST & RESPONSE {}\n".format("*" * 32, "*" * 32)
+        #
+        #     # log request
+        #     err_msg += "====== request details ======\n"
+        #     err_msg += "url: {}\n".format(url)
+        #     err_msg += "method: {}\n".format(method)
+        #     err_msg += "headers: {}\n".format(parsed_test_request.pop("headers", {}))
+        #     for k, v in parsed_test_request.items():
+        #         v = utils.omit_long_data(v)
+        #         err_msg += "{}: {}\n".format(k, repr(v))
+        #
+        #     err_msg += "\n"
+        #
+        #     # log response
+        #     err_msg += "====== response details ======\n"
+        #     err_msg += "status_code: {}\n".format(resp_obj.status_code)
+        #     err_msg += "headers: {}\n".format(resp_obj.headers)
+        #     err_msg += "body: {}\n".format(repr(resp_obj.text))
+        #     logger.log_error(err_msg)
 
-            err_msg += "\n"
+            # raise
 
-            # log response
-            err_msg += "====== response details ======\n"
-            err_msg += "status_code: {}\n".format(resp_obj.status_code)
-            err_msg += "headers: {}\n".format(resp_obj.headers)
-            err_msg += "body: {}\n".format(repr(resp_obj.text))
-            logger.log_error(err_msg)
+        # finally:
+        #     self.validation_results = self.session_context.validation_results
 
-            raise
+        return validate_pass, failures
 
-        finally:
-            self.validation_results = self.session_context.validation_results
+    def _run_test(self, test_dict):
+        """ run single teststep.
+
+        Args:
+            test_dict (dict): teststep info
+                {
+                    "name": "teststep description",
+                    "skip": "skip this test unconditionally",
+                    "times": 3,
+                    "variables": [],            # optional, override
+                    "request": {
+                        "url": "http://127.0.0.1:5000/api/users/1000",
+                        "method": "POST",
+                        "headers": {
+                            "Content-Type": "application/json",
+                            "authorization": "$authorization",
+                            "random": "$random"
+                        },
+                        "json": {"name": "user", "password": "123456"}
+                    },
+                    "extract": {},              # optional
+                    "validate": [],             # optional
+                    "setup_hooks": [],          # optional
+                    "teardown_hooks": [],       # optional
+                    "wait":{}                   # optional
+                }
+
+        Raises:
+            exceptions.ParamsError
+            exceptions.ValidationFailure
+            exceptions.ExtractFailure
+
+        """
+        # get wait parameter, if this step result needs to waif for a right one
+        wait_params = test_dict.get("wait", {})
+        validate_pass = None
+        failures = []
+
+        if wait_params:
+            wait_total_time = wait_params["Total_Time"] if wait_params.has_key('Total_Time') else 300
+            wait_interval = wait_params["Interval"] if wait_params.has_key('Interval') else 5
+            # validate for wait function
+            wait_validators = wait_params.get("validate", [])
+
+            for item in [wait_total_time, wait_interval]:
+                if not isinstance(item, int):
+                    err_msg = u"Invalid wait function parameters! => {}\n".format(item)
+                    logger.log_error(err_msg)
+                    raise exceptions.ParamsError(err_msg)
+
+            start_time = time.time()
+            current_time = time.time()
+
+
+            try:
+                while current_time - start_time < wait_total_time:
+                    validate_pass, failures = self._run_test_once(test_dict=test_dict, wait_validators=wait_validators)
+
+                    # to break while when validate is OK
+                    if validate_pass:
+                        break
+
+                    current_time = time.time()
+                    time.sleep(wait_interval)
+
+            # to raise alarm when failures
+            except (exceptions.ParamsError, exceptions.ValidationFailure, exceptions.ExtractFailure):
+                raise
+
+
+        else:
+            validate_pass, failures = self._run_test_once(test_dict=test_dict)
+
+        if not validate_pass:
+            failures_string = "\n".join([failure for failure in failures]) 
+            raise exceptions.ValidationFailure(failures_string)
 
     def _run_testcase(self, testcase_dict):
         """ run single testcase.

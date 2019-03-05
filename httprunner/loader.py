@@ -181,6 +181,8 @@ def load_dot_env_file(dot_env_path):
                 variable, value = line.split("=", 1)
             elif ":" in line:
                 variable, value = line.split(":", 1)
+            elif line.startswith("#"):
+                    pass
             else:
                 raise exceptions.FileFormatError(".env format error")
 

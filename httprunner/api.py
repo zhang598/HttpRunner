@@ -299,3 +299,7 @@ def prepare_locust_tests(path):
         "functions": functions,
         "tests": tests
     }
+
+if __name__ == "__main__":
+    test=HttpRunner()
+    test.run("/Users/zhang/code/HttpRunner/tests/testcases/arch/tenants.yaml")
