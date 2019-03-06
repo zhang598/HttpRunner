@@ -13,3 +13,4 @@ logs/%
 locustfile.py
 site/
 reports/*.html
+*.log

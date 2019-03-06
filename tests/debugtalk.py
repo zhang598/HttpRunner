@@ -7,6 +7,7 @@ import time
 import base64
 import unittest
 import subprocess
+import sys
 from httprunner import loader, parser, logger
 from httprunner.api import HttpRunner
 
@@ -16,7 +17,11 @@ BASE_URL = os.environ['BaseURL']
 TOKEN_KIND = os.environ['TokenKind']
 
 def base64Token(usr, password):
-    return "Basic " + base64.b64encode("%s:%s"%(usr,password))
+    if sys.version_info > (3, 0):
+        text= usr + ":" + password
+        return "Basic " + base64.b64encode(text.encode()).decode()
+    else:
+        return "Basic " + base64.b64encode("%s:%s"%(usr, password))
 
 def getBaseURL():
     return BASE_URL
