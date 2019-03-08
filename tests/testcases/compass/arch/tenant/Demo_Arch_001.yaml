@@ -17,8 +17,6 @@
 -   config:
         name: Demo_Arch_001
         base_url: ${getBaseURL()}
-        headers:
-            Authorization: $token
         variables:
             - token: ${getToken()}
             - tenantObject: 
@@ -26,7 +24,9 @@
                     'id': 'usr001'
                 }
             - tenantId: usr001
-        verify: False
+        verify: ${checkSSLCertificate()}
+        parameters:
+            - user_id: ${parameterize(user_id.csv)}
 
 -   test:
         api: api/compass/arch/tenant/tenants_list.yaml

@@ -16,15 +16,28 @@ ADMIN_PASSWORD = os.environ['AdminPassword']
 BASE_URL = os.environ['BaseURL']
 TOKEN_KIND = os.environ['TokenKind']
 
+
+##### public functions #####
 def base64Token(usr, password):
     if sys.version_info > (3, 0):
-        text= usr + ":" + password
+        text = usr + ":" + password
         return "Basic " + base64.b64encode(text.encode()).decode()
     else:
         return "Basic " + base64.b64encode("%s:%s"%(usr, password))
 
 def getBaseURL():
     return BASE_URL
+
+def checkSSLCertificate():
+    try:
+        SSL_VERIFY = os.environ['SSLVerify']
+        if SSL_VERIFY == True or SSL_VERIFY == 'true':
+            return True
+    except:
+        logger.log_error("Cannot confirm whether to check SSL certificate！ Default no to check SSL certification.")
+        logger.logging.exception(e)
+    finally:
+        return False
 
 def getToken(usr=ADMIN_USER_NAME, password=ADMIN_PASSWORD):
     if  TOKEN_KIND == 'oauth':
@@ -34,33 +47,38 @@ def getToken(usr=ADMIN_USER_NAME, password=ADMIN_PASSWORD):
         return base64Token(usr, password)
 
 def getTokenFromHodor(user, password):
-    GO_FILE_TO_GET_TOKEN = os.environ['GoFileToGetToken']
-    whole_cmd = 'go run {} --url {} --user {} --password {}'.format(
-        GO_FILE_TO_GET_TOKEN, BASE_URL, user, password)
-    s = subprocess.Popen(whole_cmd, stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE, shell=True)
-    if s.stdout:
-        try:
-            error = s.stderr.read().decode('utf8')
-            if error:
-                logger.log_info(
-                    'cannot get the token, error message is {}'.format(error))
-                return ''
+    try:
+        project_working_directory = os.getcwd()
+        goFileToGetToken = os.path.join(project_working_directory, "aleo-go/src/aleo-e2e/cmd/hodor-auth")
+        newGoEnvPATH = os.path.join(project_working_directory, "aleo-go")
 
-            result = s.stdout.read().decode('utf8')
-            token = result.split('\n')[-2]
-            logger.log_info('the token is {}'.format(token))
-        except Exception as e:
+        whole_cmd = 'go run {} --url {} --user {} --password {}'.format(
+            goFileToGetToken, BASE_URL, user, password)
+        s = subprocess.Popen(whole_cmd, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, shell=True,
+                             env={"GOPATH": newGoEnvPATH})
+
+        error = s.stderr.read().decode('utf8')
+
+        if error:
+            logger.log_info(
+                'cannot get the token, error message is {}'.format(error))
+            raise Exception()
+
+        result = s.stdout.read().decode('utf8')
+        token = result.split('\n')[-2]
+        logger.log_info('the token is {}'.format(token))
+
+    except Exception as e:
             logger.log_error("cannot get hodor token")
             logger.logging.exception(e)
-            raise e
+
     return "Bearer " + token
 
-def hook_print(msg):
-    print msg
+def hookPrint(msg):
+    print (msg)
 
-def hook_function(testcase_path, variables):
-    print variables
+def hookFunction(testcase_path, variables):
     testcase_path = os.path.join(os.getcwd(), testcase_path)
 
     runner = HttpRunner(failfast=True)
@@ -72,7 +90,7 @@ def hook_function(testcase_path, variables):
     parsed_tests_mapping = parser.parse_tests(tests_mapping)
     runner.run(parsed_tests_mapping)
 
-def gen_random_string(str_len=8):
+def genRandomString(str_len=8):
     random_char_list = []
     for _ in range(str_len):
         random_char = random.choice(string.ascii_lowercase + string.digits)
@@ -83,9 +101,8 @@ def gen_random_string(str_len=8):
 
 def assertSum(a, b):
     return sum([a, b])
-    os.environ.keys
 
-def get_default_request():
+def getDefaultRequest():
     return {
         "base_url": BASE_URL,
         "headers": {
@@ -93,9 +110,20 @@ def get_default_request():
         }
     }
 
-os.environ["TEST_ENV"] = "PRODUCTION"
-
-def skip_test_in_production_env():
+def skiptTestInProductionEnv():
+    os.environ["TEST_ENV"] = "PRODUCTION"
     """ skip this test in production environment
     """
     return os.environ["TEST_ENV"] == "PRODUCTION"
+
+##### app private functions ######
+
+##### resource private functions ######
+
+##### auth private functions ######
+
+##### insight private functions ######
+
+##### develops private functions ######
+
+##### net private functions ######

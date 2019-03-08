@@ -302,4 +302,4 @@ def prepare_locust_tests(path):
 
 if __name__ == "__main__":
     test=HttpRunner()
-    test.run("/Users/zhang/code/HttpRunner/tests/testcases/arch/tenants.yaml")
+    test.run("/Users/zhang/code/HttpRunner/tests/testcases/compass/arch/tenant/Demo_Arch_001.yaml")
